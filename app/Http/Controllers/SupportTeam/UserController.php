@@ -126,6 +126,7 @@ class UserController extends Controller
 
         $data = $req->except(Qs::getStaffRecord());
         $data['name'] = ucwords($req->name);
+        $data['user_type'] = $user_type;
 
         if($user_is_staff && !$user_is_teamSA){
             $data['username'] = Qs::getAppCode().'/STAFF/'.date('Y/m', strtotime($req->emp_date)).'/'.mt_rand(1000, 9999);
@@ -138,7 +139,7 @@ class UserController extends Controller
             $photo = $req->file('photo');
             $f = Qs::getFileMetaData($photo);
             $f['name'] = 'photo.' . $f['ext'];
-            $f['path'] = $photo->storeAs(Qs::getUploadPath($user_type).$data['code'], $f['name']);
+            $f['path'] = $photo->storeAs(Qs::getUploadPath($user_type).$user->code, $f['name']);
             $data['photo'] = asset('storage/' . $f['path']);
         }
 
